@@ -22,8 +22,8 @@
 # STORE DATA LOCALLY ------------------------------------------------------
 
 
-  df <- pull_unaids()
+  df <- pull_unaids(pepfar_only = FALSE)
   
-  write_parquet(df, "Data/2023_unaids_est.parquet")
+  write_parquet(df, "Data/2023_unaids_est_global.parquet")
 
   
