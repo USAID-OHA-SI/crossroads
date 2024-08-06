@@ -77,12 +77,14 @@
     arrange(indicator)
   
   df_viz <- df_plhiv %>% 
-    # filter(year <= min(df_proj$year)) %>%
+    # filter(type == "Global") %>% 
+    mutate(indicator = ifelse(type == "PEPFAR", "Number PLHIV (PEPFAR)", indicator),
+           across(ends_with("bound"), \(x) ifelse(indicator == "Number PLHIV (PEPFAR)", NA, x))) %>% 
     bind_rows(df_proj)
   
   df_viz <- df_viz %>% 
     mutate(lab_pt = case_when(year == min(year) | year == max(year) | year == 2004 ~ estimate,
-                          year == min(df_proj$year) & indicator == "Number PLHIV" ~ estimate),
+                          year == min(df_proj$year) & str_detect(indicator,"Number PLHIV") ~ estimate),
            fill_color = case_when(indicator == "Number PLHIV" ~ slate,
                                   indicator == "PLHIV with constant 2022 coverage" ~ orchid_bloom,
                                   indicator == "PLHIV with 2025 targets met" ~ electric_indigo))
@@ -92,7 +94,6 @@
 
   
   df_viz %>% 
-    filter(type == "Global") %>% 
     ggplot(aes(year, estimate)) +
     geom_ribbon(aes(ymin = lower_bound, ymax = upper_bound), na.rm = TRUE,
                 fill = si_palettes$slate_t[4], alpha = .4) +
@@ -108,6 +109,7 @@
     scale_x_continuous(breaks = seq(1990, 2050, by = 10)) +
     scale_fill_manual(aesthetics = c("fill", "color"),
                       values = c("Number PLHIV" = slate,
+                                 "Number PLHIV (PEPFAR)" = si_palettes$slate_t[3],
                                  # "PLHIV with constant 2022 coverage" = orchid_bloom,
                                  # "PLHIV with 2025 targets met" = electric_indigo)) +
                                  "PLHIV with constant 2022 coverage" = "#CF0B29",
