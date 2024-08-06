@@ -29,7 +29,7 @@
   
   path <- "Data/2023_unaids_est_global.parquet" 
   
-  caption <- glue("Source: UNAIDS AIDSinfo Global Data 2024 Release | Ref id: {ref_id}")
+  caption_src <- glue("Source: UNAIDS AIDSinfo Global Data 2024 Release | Ref id: {ref_id}")
   
 # IMPORT ------------------------------------------------------------------
   
@@ -77,7 +77,7 @@
     scale_color_manual(values = c("Total deaths to HIV Population" = "#CF0B29" ,
                                   "Number New HIV Infections" = "#15A6AE")) +
     labs(x = NULL, y = NULL,
-         caption = caption) +
+         caption = caption_src) +
     coord_cartesian(clip = "off") +
     si_style_ygrid() +
     theme(axis.text.y = element_blank())
