@@ -96,6 +96,7 @@
   
   df_viz %>% 
     ggplot(aes(year, estimate)) +
+    geom_vline(xintercept = 2004, color = matterhorn, linetype = "dashed") +
     geom_ribbon(aes(ymin = lower_bound, ymax = upper_bound), na.rm = TRUE,
                 fill = si_palettes$slate_t[4], alpha = .4) +
     geom_line(aes(color = indicator, group = indicator), na.rm = TRUE,
@@ -116,8 +117,14 @@
                                  "PLHIV with constant 2022 coverage" = "#CF0B29",
                                  "PLHIV with 2025 targets met" = "#15A6AE")) +
     labs(x = NULL, y = NULL, color = NULL,
-         caption = caption_src) + 
+         title = "[TITLE TO BE SUPPLIED]",
+         subtitle = "PLHIV estimates projected out based on whether UNAID 2025 targets are met",
+         caption = glue("Note: PEPFAR values calculated by summing point estimates
+                        {caption_src} ")) + 
     coord_cartesian(clip = "off") +
     si_style() +
     theme(axis.text.y = element_blank())
+
+  si_save("03_global_plhiv_proj",
+          path = "Images", device = "png")  
   

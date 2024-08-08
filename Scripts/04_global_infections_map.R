@@ -94,9 +94,14 @@
     scale_fill_viridis_c(end = .8, labels = label_percent(),
                          option = "C", na.value = si_palettes$slate_t[3]) +
     coord_equal() +
-    labs(caption = caption_src, fill = "Global share of new infection in 2023") +
+    labs(fill = NULL,
+         subtitle = "Global share of new infection in 2023",
+         # caption = caption_src 
+         ) +
     si_style_map() +
-    theme(panel.spacing = unit(.3, "lines"))
+    theme(panel.spacing = unit(.3, "lines"),
+          # legend.position = "bottom"
+          )
 
   v2 <- df_viz %>% 
     filter(pepfar == "PEPFAR Countries") %>% 
@@ -113,10 +118,18 @@
     scale_x_continuous(expand = c(.005,005)) +
     coord_cartesian(clip = "off") +
     labs(x = NULL, y = NULL,
-         caption = caption_src) +
+         subtitle = "PEPFAR new infection in 2023",
+         # caption = caption_src
+         ) +
     si_style_xgrid() +
     theme(axis.text.x = element_blank())
 
   
-  v1 + v2 +plot_layout(widths = c(2,1))
+  v1 + v2 + 
+    plot_layout(widths = c(3,1)) +
+    plot_annotation(title = "[TITLE TO BE SUPPLIED]",
+                    caption = caption_src,
+                    theme = si_style())
 
+  si_save("04_infection_map",
+          path = "Images", device = "png")

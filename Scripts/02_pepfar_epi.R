@@ -64,7 +64,7 @@
     ggplot(aes(year, est_viz, group = grp, fill = indicator, color = indicator)) +
     geom_blank(aes(y = -est_viz)) +
     geom_area(alpha = .2, position = "identity") +
-    geom_point(aes(y = end_pt), na.rm = TRUE) +
+    geom_point(aes(y = end_pt), na.rm = TRUE, show.legend = FALSE) +
     geom_text(aes(label = label_number(.1, scale_cut = cut_si(""))(abs(lab_pt))), na.rm = TRUE,
               family = "Source Sans Pro", hjust = -.3) +
     geom_hline(yintercept = 0, color = "white") +
@@ -73,12 +73,19 @@
     scale_y_continuous(breaks = seq(-3e6, 3e6, by = 1e6)) + 
     scale_x_continuous(breaks = c(2004, seq(1990, 2020, by = 10))) +
     scale_fill_manual(values = c("Total deaths to HIV Population" = "#CF0B29" ,
-                                 "Number New HIV Infections" = "#15A6AE")) +
+                                 "Number New HIV Infections" = "#15A6AE"),) +
     scale_color_manual(values = c("Total deaths to HIV Population" = "#CF0B29" ,
-                                  "Number New HIV Infections" = "#15A6AE")) +
-    labs(x = NULL, y = NULL,
-         caption = caption_src) +
+                                  "Number New HIV Infections" = "#15A6AE"),
+                       guides) +
+    guides(color = FALSE) + 
+    labs(x = NULL, y = NULL, fill = NULL,
+         title = "[TITLE TO BE SUPPLIED]",
+         caption = glue("Note: PEPFAR values calculated by summing point estimates
+                        {caption_src}")) +
     coord_cartesian(clip = "off") +
     si_style_ygrid() +
     theme(axis.text.y = element_blank())
+  
+  si_save("02_pepfar_epi",
+          path = "Images", device = "png")
   
