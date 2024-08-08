@@ -67,6 +67,7 @@
     filter(pepfar) %>% 
     prinf()
   
+  
   df_unaids %>% 
     filter(year == max(year),
            pepfar == TRUE
@@ -346,5 +347,30 @@
     labs(x = NULL, y = NULL) +
     si_style_xgrid() +
     theme(legend.position = "none")
+  
+  
+
+# EPI CONTROL -------------------------------------------------------------
+
+  df_ec <- df_unaids %>% 
+    filter(indicator %in% c("Number New HIV Infections", "Total deaths to HIV Population"),
+           age == "All",
+           sex == "All",
+           pepfar == TRUE,
+           year == max(year)) %>% 
+    mutate(indicator = str_extract(indicator, "Infections|deaths") %>% tolower) %>%
+    select(country, indicator, est = estimate, lower = lower_bound, upper = upper_bound) %>% 
+    pivot_wider(names_from = indicator,
+                values_from = c(est, lower, upper))
+  
+  df_ec %>% 
+    ggplot(aes(est_infections, est_deaths)) +
+    geom_blank(aes(est_deaths, est_infections)) + 
+    geom_abline(slope = 1) +
+    geom_errorbar(aes(xmin = lower_infections, xmax = upper_infections)) +
+    geom_errorbar(aes(ymin = lower_deaths, ymax = upper_deaths)) +
+    geom_point() +
+    scale_x_log10() +
+    scale_y_log10()
   
   
