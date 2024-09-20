@@ -110,15 +110,15 @@
     
       df_viz %>% 
         filter(country %in% ou_list) %>% 
-        select(country, indicator, estimate) %>% 
+        select(country, indicator, estimate, achv_95_relative) %>% 
         pivot_wider(names_from = indicator,
                     values_from = "estimate",
                     names_glue = "{indicator %>% stringr::str_extract_all('PLHIV|with|VLS') %>% tolower}"
         ) %>% 
-        arrange(desc(plhiv)#, desc(with), desc(vls)
+        arrange(desc(achv_95_relative)#, desc(with), desc(vls)
                 )%>% 
         gt() %>%
-        #cols_hide(c(achieved)) %>% 
+        cols_hide(c(achv_95_relative)) %>% 
         fmt_percent(columns = c(plhiv, with, vls),
                     decimals = 0, scale_values = FALSE) %>%
         cols_label(plhiv = "Known Status",
